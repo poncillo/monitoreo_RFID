@@ -148,7 +148,7 @@ class RegistroUsuarioView:
 
     def guardar_usuario(self):
         # Obtener el código de usuario del campo (que es de solo lectura)
-        username = self.entry_username.get()
+        username = self.entry_username.get()aaa
         password = self.entry_nuevo_pass.get()
         rol = self.var_rol.get()
         telefono = self.entry_telefono.get()
