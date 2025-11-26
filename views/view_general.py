@@ -1,4 +1,3 @@
-# views/view_general.py
 import tkinter as tk
 from tkinter import ttk, messagebox
 from models.database import Database
@@ -26,7 +25,7 @@ class GeneralView(tk.Frame):
         tk.Label(main_frame, text="Panel Usuario General", 
                 font=("Arial", 18, "bold"), bg="white").pack(pady=(0, 30))
 
-        # Frame contenedor para centrar los botones
+        # Frame contenedor para centrar los botones y acomodarse sin darle geometría completamente específica
         frame_contenedor = tk.Frame(main_frame, bg="white")
         frame_contenedor.pack(expand=True)
 
@@ -39,7 +38,6 @@ class GeneralView(tk.Frame):
         ttk.Button(frame_contenedor, text="🗺️ Visualizar Rutas", 
                   command=self.visualizar_rutas, width=20).pack(pady=10)
 
-        # NUEVO BOTÓN: Gestionar Cilindros
         ttk.Button(frame_contenedor, text="⛽ Gestionar Cilindros", 
                   command=self.gestionar_cilindros, width=20).pack(pady=10)
 
@@ -130,7 +128,6 @@ class GeneralView(tk.Frame):
             tree.heading(col, text=col)
             tree.column(col, width=120)
 
-        # Scrollbar
         scrollbar = ttk.Scrollbar(frame_tabla, orient=tk.VERTICAL, command=tree.yview)
         tree.configure(yscrollcommand=scrollbar.set)
         tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -139,7 +136,6 @@ class GeneralView(tk.Frame):
         # Cargar datos
         self.cargar_vehiculos_general(tree)
 
-        # Botones de exportación
         frame_acciones = tk.Frame(ventana_vehiculos, bg="white", pady=10)
         frame_acciones.pack(fill=tk.X)
 
@@ -210,7 +206,6 @@ class GeneralView(tk.Frame):
         # Cargar datos
         self.cargar_rutas_general(tree)
 
-        # Botones de exportación
         frame_acciones = tk.Frame(ventana_rutas, bg="white", pady=10)
         frame_acciones.pack(fill=tk.X)
 

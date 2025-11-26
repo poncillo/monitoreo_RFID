@@ -26,7 +26,6 @@ def create_connection():
         print(f"Error al conectar con MySQL: {e}")
         return None
 
-# Bloque de prueba: Esto solo se ejecuta si corres este archivo directamente
 if __name__ == "__main__":
     conn = create_connection()
     if conn:

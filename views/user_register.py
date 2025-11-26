@@ -1,8 +1,7 @@
-# views/user_register.py
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from models.usuario import Usuario
-from db_connection import create_connection  # Importar para la función de generación
+from db_connection import create_connection
 
 class RegistroUsuarioView:
     def __init__(self, parent):
@@ -35,10 +34,8 @@ class RegistroUsuarioView:
         frame = tk.Frame(self.ventana_reg, bg="white", padx=20, pady=20)
         frame.pack(fill=tk.BOTH, expand=True)
 
-        # --- Título ---
         tk.Label(frame, text="Nuevo Registro", font=("Arial", 14, "bold"), bg="white").pack(pady=(0, 15))
 
-        # --- Selección de Rol ---
         tk.Label(frame, text="Seleccione el Rol:", bg="white", font=("Arial", 10, "bold")).pack(anchor="w", pady=5)
         
         self.var_rol = tk.StringVar(value="chofer")
@@ -51,12 +48,10 @@ class RegistroUsuarioView:
                            bg="white", activebackground="white", 
                            command=self.actualizar_formulario).pack(side=tk.LEFT, padx=10)
 
-        # --- Usuario (Automático, solo lectura) ---
         tk.Label(frame, text="Código de Usuario:", bg="white").pack(anchor="w", pady=(15,0))
         self.entry_username = ttk.Entry(frame, state="readonly", foreground="blue", font=("Arial", 10, "bold"))
         self.entry_username.pack(fill=tk.X, pady=5)
         
-        # Generar y mostrar el código automáticamente
         self.actualizar_codigo_usuario()
 
         # --- Contraseña ---

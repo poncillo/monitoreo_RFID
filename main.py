@@ -1,4 +1,3 @@
-# main.py
 import tkinter as tk
 from views.login import LoginViewCH
 from views.view_admin import AdminView

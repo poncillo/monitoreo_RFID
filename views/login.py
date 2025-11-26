@@ -1,7 +1,7 @@
 import re
 import tkinter as tk
 from tkinter import ttk, messagebox
-from models.usuario import Usuario  # Importamos nuestro modelo 
+from models.usuario import Usuario 
 from views.user_register import RegistroUsuarioView
 
 class LoginViewCH(tk.Frame):
@@ -123,7 +123,6 @@ class LoginViewCH(tk.Frame):
         username = self.usuario_entry.get().strip()
         password = self.password_entry.get()
         
-        # Validaciones básicas
         if not username:
             self.mostrar_error("El usuario es obligatorio", self.usuario_entry)
             self.usuario_entry.focus()
@@ -140,18 +139,14 @@ class LoginViewCH(tk.Frame):
             return
 
         try:
-            # AUTENTICACIÓN CON NUESTRO SISTEMA - CAMBIO PRINCIPAL
             usuario = Usuario.autenticar(username, password)
             
             if usuario:
-                # Login exitoso - limpiar campos
                 self.usuario_entry.delete(0, tk.END)
                 self.password_entry.delete(0, tk.END)
                 
-                # IMPRIMIR EN CONSOLA - NUEVA LÍNEA AGREGADA
                 print("login exitoso!")
                 
-                # Notificar al controlador del login exitoso
                 if self.controlador:
                     self.controlador.on_login_exitoso(usuario)
                 else:
