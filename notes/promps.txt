@@ -1,0 +1,13 @@
+Hola, tengo un proyecto a desarrollar con mysql y python, estos códigos de biblioteca.py, execute.py, libro.py y usuario.py, son de un ejemplo de un programa que maneja una biblioteca por 
+medio de una conexión de base de datos con SQL...
+Ahora lo que quiero convertir es mi programa propuesto en mi "Caso de Uso Proyecto" en el .pdf a un programa en python como el de la biblioteca pero bien estructurado, lo que debe de tener es lo siguiente:
+
+.- Mínimo 6 clases implementadas que reflejan principios de POO.
+
+.- Mínimo 4 tablas con operaciones CRUD completas (alta, baja, consulta, modificación).
+
+.- Aplica mínimo 5 pruebas unitarias que validan distintos componentes del sistema y maneja excepciones.
+
+
+
+¿Cómo puedo aplicarlo o estructurarlo de la mejor manera?
