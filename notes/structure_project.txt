@@ -1,0 +1,22 @@
+First Version:
+proyecto_transporte/
+│
+├── db_connection.py          # Conexión a BD (similar al ejemplo)
+├── models/                   # Modelos de datos
+│   ├── __init__.py
+│   ├── chofer.py
+│   ├── vehiculo.py
+│   ├── ruta.py
+│   ├── entrega.py
+│   └── detalle_entrega.py
+├── services/                 # Lógica de negocio
+│   ├── __init__.py
+│   ├── gestion_transporte.py
+│   └── reportes_service.py
+├── tests/                    # Pruebas unitarias
+│   ├── __init__.py
+│   ├── test_chofer.py
+│   ├── test_vehiculo.py
+│   ├── test_entrega.py
+│   └── test_gestion_transporte.py
+└── main.py   
