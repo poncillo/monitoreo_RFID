@@ -31,3 +31,68 @@ Por ejemplo:
 5. Seleccionar "Registrar Usuario" (Tener en cuenta el botón cancelar también)
 6. Mostrar mensaje en la consola y en una venta que diga "Usuario registrado correctamente" (Agregar validación de llenar todos los datos)
 7. Este tiene que mostrarse en la bd obviamente
+
+3. PROMP PARA FUNCIONES Y CONTROL QUE TENDRÁ EL USUARIO ADMIN...
+Ok, ahora vamos con las funciones y tareas de cada usuario, empezamos con el más pesado que es el usuario administrador, (admin), este usuario dentro de su pantalla podrá...
+.- Ver y gestionar usuarios generales, funciones y un botón de "Editar Usuario" y opciones como:
+1. Botón "Gestionar Usuarios", y luego opción en cada usuario "Editar Usuario":
+.- Eliminar Usuario
+.- Cambiar Contraseña
+.- Cambiar Número de Télefono
+.- Cambiar estado dropdown list (Únicamente activo, inactivo), el inactivo es para los que esten de vacaciones, por ejemplo...
+2. Botón "Gestionar Vehículos"
+.- Registrar vehiculos:
+.- id (generado automatico)
+.- placa (insertada por el usuario)
+.- modelo (dropdown list, 'np 300 2018', 'np 300 2020', 'np 300 2024', 'chevrolet s10 2018', 'chevrolet s10 2020', 'chevrolet s10 2022', 'chevrolet s10 2024', 'Ram 4000/3500')
+.- capacidad_cilindros (dropdown list, 15, 20, y 35 cilindros)
+.- estado ('disponible', 'mantenimiento', 'ocupado'), DISPONIBLE SIEMPRE Y CUANDO NO SE AGREGUE UN CHOFER
+.- Asignar chofer (dropdownlist de solo los usuarios de tipo 'Chofer', OJO: los choferes solo pueden tener 1 vehiculo)
+.- La creación o fecha de creación igual en automático...
+3. Botón "Gestionar Ruta"
+.- id (generado automatico)
+.- chofer asignado (dropdownlist de los choferes existentes, solo puede haber 1 por ruta)
+.- vehiculo asignado a chofer (ese en automatico seleccionando el chofer ya que en vehiculos se pasa ese dato para registrar uno)
+.- origen (texto)
+.- destino (texto)
+.- distancia km: Ingresa en numeros
+.- tiempo en horas: Ingresar numeros (dropdownlist '2', '4', '8' y '10')
+.- estado: (dropdownlist) 'programada', 'en_camino', 'completada', 'cancelada' (POR DEFECTO PROGRAMADA, ESTO LO MODIFICARA EL CHOFER EN SU PANTALLA)...
+.- Fecha igual automático
+
+RECUERDA QUE TODO LO QUE SE HAGA TIENE QUE IMPRIMIRSE TAMBIÉN EN CONSOLA (ESTO PARA EL REGISTRO DOCUMENTADO DE LAS PRUEBAS UNITARIAS)
+
+Es importante analizar y construír un código de vista de pantalla (dentro de views), para cada apartado, en este caso:
+.- view_admin.py (Para admin)
+
+LAS VISTAS DE GENERAL Y CHOFER AÚN NO LAS DESARROLLES HASTA EL SIGUIENTE PROMP DONDE LO INDIQUE, DE MOMENTO ES PARA QUE TE DES UNA IDEA
+.- view_general.py (Usuario general)
+.- view_chofer.py (Para chofer)
+Migra los cambios y elimina el código de main.py y dejálo en su respectiva pantalla, de esa manera reducimos líneas dentro de main y esta mejor estructurado
+    def mostrar_panel_admin(self):
+        """Panel para administradores"""
+        tk.Label(self, text=f"Panel Admin - Bienvenido {self.usuario_actual.username}", 
+                font=("Arial", 16, "bold")).pack(pady=20)
+        
+        # Aquí irían las funcionalidades específicas de admin
+        ttk.Button(self, text="Gestionar Usuarios", command=self.gestionar_usuarios).pack(pady=5)
+        ttk.Button(self, text="Gestionar Vehículos", command=self.gestionar_vehiculos).pack(pady=5)
+        ttk.Button(self, text="Ver Reportes", command=self.ver_reportes).pack(pady=5)
+        ttk.Button(self, text="Cerrar Sesión", command=self.cerrar_sesion).pack(pady=20)
+        
+    def mostrar_panel_chofer(self):
+        """Panel para choferes"""
+        tk.Label(self, text=f"Panel Chofer - Bienvenido {self.usuario_actual.username}", 
+                font=("Arial", 16, "bold")).pack(pady=20)
+        
+        # Funcionalidades para choferes
+        ttk.Button(self, text="Mis Rutas", command=self.mis_rutas).pack(pady=5)
+        ttk.Button(self, text="Reportar Ubicación", command=self.reportar_ubicacion).pack(pady=5)
+        ttk.Button(self, text="Cerrar Sesión", command=self.cerrar_sesion).pack(pady=20)
+        
+    def mostrar_panel_general(self):
+        """Panel para usuarios generales"""
+        tk.Label(self, text=f"Panel General - Bienvenido {self.usuario_actual.username}", 
+                font=("Arial", 16, "bold")).pack(pady=20)
+
+4. PROMP
