@@ -1,6 +1,7 @@
 import re
 import tkinter as tk
 from tkinter import ttk, messagebox
+from models.usuario import Usuario  # Importamos nuestro modelo Usuario
 
 class LoginViewCH(tk.Frame):
     def __init__(self, parent, controlador=None):
@@ -17,7 +18,7 @@ class LoginViewCH(tk.Frame):
         self.style.map("Error.TEntry", bordercolor=[("focus", "#dc3545"), ("!focus", "#dc3545")], foreground=[("focus", "black")])
         
         # Estilo para el botón de Salir (opcional)
-        self.style.configure("Danger.TButton", foreground="white", background="#dc3545", font=("Arial", 10))
+        self.style.configure("Danger.TButton", foreground="black", background="#dc3545", font=("Arial", 10))
         self.style.map("Danger.TButton", background=[("active", "#c82333")])
 
     def interface_conf(self):
@@ -34,7 +35,7 @@ class LoginViewCH(tk.Frame):
         # Marco interno con tamaño fijo
         frame = tk.Frame(frame_contenedor, bg="white", padx=20, pady=20)
         frame.grid(row=0, column=0, sticky="")
-        frame.configure(width=350, height=380)  # Aumentamos la altura para acomodar el logo
+        frame.configure(width=550, height=700)
 
         # Cargar y mostrar el logotipo
         try:
@@ -42,7 +43,6 @@ class LoginViewCH(tk.Frame):
             from main import resource_path
             logo_path = resource_path('images/demo_logo.png')
             
-            # MÉTODO 1: Usando tk.PhotoImage con subsample (más simple)
             self.logo_image = tk.PhotoImage(file=logo_path)
             self.logo_image = self.logo_image.subsample(2, 2)  # Reducir a la mitad
             
@@ -53,18 +53,19 @@ class LoginViewCH(tk.Frame):
         except Exception as e:
             print(f"Error al cargar el logo: {e}")
 
-        # Título (ahora en la fila 1)
-        tk.Label(frame, text="Inicio de Sesión", font=("Arial", 16, "bold"), bg="white").grid(row=1, column=0, columnspan=2, pady=10)
+        # Título
+        tk.Label(frame, text="Sistema de Monitoreo de Cilindros RFID", font=("Arial", 16, "bold"), bg="white").grid(row=1, column=0, columnspan=2, pady=10)
 
-        # Campos de entrada (actualizar números de fila)
-        self.crear_campo_email(frame, 2)  # Cambiado de 1 a 2
-        self.crear_campo_password(frame, 4)  # Cambiado de 3 a 4
+        # Campos de entrada - CAMBIO IMPORTANTE: Usamos username en lugar de email
+        self.crear_campo_usuario(frame, 2)
+        self.crear_campo_password(frame, 4)
 
-        # Botón para Iniciar Sesión (actualizar fila)
+        # Botón para Iniciar Sesión
         ttk.Button(frame, text="Iniciar Sesión", command=self.iniciar_sesion).grid(row=6, column=0, columnspan=2, pady=(15, 5), sticky="ew")
-
-        # Botón para Salir (actualizar fila)
-        ttk.Button(frame,text="Salir",command=self.exit,).grid(row=7, column=0, columnspan=2, pady=(0, 10), sticky="ew")
+        # Botón de Creación de usuario
+        ttk.Button(frame, text="Registrar Nuevo Usuario", command=self).grid(row=8, column=0, columnspan=2, pady=(0, 10), sticky="ew")
+        # Botón para Salir
+        ttk.Button(frame, text="Salir", command=self.exit, style="Danger.TButton").grid(row=8, column=0, columnspan=2, pady=(0, 10), sticky="ew")
 
     def exit(self):
         if messagebox.askyesno("Salir", "¿Está seguro que desea cerrar la aplicación?"):
@@ -73,69 +74,89 @@ class LoginViewCH(tk.Frame):
             else:
                 self.master.destroy()
 
-    def crear_campo_email(self, padre, fila):
-        """Crea el campo de entrada para el email."""
-        # CORREGIDO: Usar el parámetro 'fila' en lugar de números fijos
-        tk.Label(padre, text="Email:", bg="white", font=("Arial", 10)).grid(row=fila, column=0, sticky="w", pady=5)
-        self.email_entry = ttk.Entry(padre, width=30, font=("Arial", 10), style="TEntry")
-        self.email_entry.grid(row=fila+1, column=0, columnspan=2, pady=5, sticky="ew")
-        self.email_entry.bind("<KeyRelease>", self.validar_email_en_tiempo_real)
+    def crear_campo_usuario(self, padre, fila):
+        """Crea el campo de entrada para el usuario (NO email)."""
+        tk.Label(padre, text="Usuario:", bg="white", font=("Arial", 10)).grid(row=fila, column=0, sticky="w", pady=5)
+        self.usuario_entry = ttk.Entry(padre, width=30, font=("Arial", 10), style="TEntry")
+        self.usuario_entry.grid(row=fila+1, column=0, columnspan=2, pady=5, sticky="ew")
+        self.usuario_entry.bind("<KeyRelease>", self.validar_usuario_en_tiempo_real)
+        self.usuario_entry.bind("<Return>", lambda e: self.iniciar_sesion())  # Enter para login
 
     def crear_campo_password(self, padre, fila):
         """Crea el campo de entrada para la contraseña."""
-        # CORREGIDO: Usar el parámetro 'fila' en lugar de números fijos
         tk.Label(padre, text="Contraseña:", bg="white", font=("Arial", 10)).grid(row=fila, column=0, sticky="w", pady=5)
         self.password_entry = ttk.Entry(padre, show="*", width=30, font=("Arial", 10), style="TEntry")
         self.password_entry.grid(row=fila+1, column=0, columnspan=2, pady=5, sticky="ew")
+        self.password_entry.bind("<Return>", lambda e: self.iniciar_sesion())  # Enter para login
 
-    def validar_email(self, email):
-        return re.match(r'^[\w\.+-]+@[\w\.-]+\.[\w-]+$', email) is not None
+    def validar_usuario(self, usuario):
+        """Valida que el usuario no esté vacío y tenga formato básico."""
+        return len(usuario.strip()) >= 3  # Mínimo 3 caracteres
 
-    def validar_email_en_tiempo_real(self, event):
-        email = self.email_entry.get()
-        if email:
-            if self.validar_email(email):
-                self.email_entry.config(style="TEntry")
+    def validar_usuario_en_tiempo_real(self, event):
+        """Validación en tiempo real del campo usuario."""
+        usuario = self.usuario_entry.get()
+        if usuario:
+            if self.validar_usuario(usuario):
+                self.usuario_entry.config(style="TEntry")
             else:
-                self.email_entry.config(style="Error.TEntry")
+                self.usuario_entry.config(style="Error.TEntry")
         else:
-            self.email_entry.config(style="TEntry")
+            self.usuario_entry.config(style="TEntry")
 
-    def mostrar_error(self, mensaje, widget):
-        widget.config(style="Error.TEntry")
-        messagebox.showerror("Error", mensaje)
+    def mostrar_error(self, mensaje, widget=None):
+        """Muestra mensaje de error y resalta campo si se especifica."""
+        if widget:
+            widget.config(style="Error.TEntry")
+        messagebox.showerror("Error de Autenticación", mensaje)
 
     def iniciar_sesion(self):
-        """Verifica los datos de login y cambia a la vista de historial de movimientos."""
-        email = self.email_entry.get().strip()
+        """Verifica los datos de login contra nuestra base de datos MySQL."""
+        username = self.usuario_entry.get().strip()
         password = self.password_entry.get()
         
-        if not email:
-            self.mostrar_error("El email es obligatorio", self.email_entry)
+        # Validaciones básicas
+        if not username:
+            self.mostrar_error("El usuario es obligatorio", self.usuario_entry)
+            self.usuario_entry.focus()
             return
+            
         if not password:
             self.mostrar_error("La contraseña es obligatoria", self.password_entry)
+            self.password_entry.focus()
             return
-        if not self.validar_email(email):
-            self.mostrar_error("Formato de email inválido", self.email_entry)
+            
+        if not self.validar_usuario(username):
+            self.mostrar_error("Usuario debe tener al menos 3 caracteres", self.usuario_entry)
+            self.usuario_entry.focus()
             return
 
         try:
-            user = auth.sign_in_with_email_and_password(email, password)
-            self.email_entry.delete(0, tk.END)
-            self.password_entry.delete(0, tk.END)
-            self.controlador.login(user['idToken'])
+            # AUTENTICACIÓN CON NUESTRO SISTEMA - CAMBIO PRINCIPAL
+            usuario = Usuario.autenticar(username, password)
+            
+            if usuario:
+                # Login exitoso - limpiar campos
+                self.usuario_entry.delete(0, tk.END)
+                self.password_entry.delete(0, tk.END)
+                
+                # Notificar al controlador del login exitoso
+                if self.controlador:
+                    self.controlador.on_login_exitoso(usuario)
+                else:
+                    messagebox.showinfo("Éxito", f"Bienvenido {usuario.username} ({usuario.rol})")
+                    
+            else:
+                self.mostrar_error("Usuario o contraseña incorrectos")
+                self.password_entry.delete(0, tk.END)
+                self.usuario_entry.focus()
+                
         except Exception as e:
-            self.manejar_error_login(str(e))
+            self.mostrar_error(f"Error de conexión: {str(e)}")
+            print(f"Error en login: {e}")
 
-    def manejar_error_login(self, error_msg):
-        """Maneja los errores de autenticación de Firebase."""
-        if "INVALID_PASSWORD" in error_msg:
-            self.mostrar_error("Contraseña incorrecta", self.password_entry)
-            self.password_entry.delete(0, tk.END)
-        elif "EMAIL_NOT_FOUND" in error_msg:
-            self.mostrar_error("Email no registrado", self.email_entry)
-        elif "TOO_MANY_ATTEMPTS" in error_msg:
-            messagebox.showerror("Bloqueo temporal", "Demasiados intentos fallidos. Intente nuevamente más tarde.")
-        else:
-            messagebox.showerror("Error", f"Error de autenticación: {error_msg}")
+    def limpiar_campos(self):
+        """Limpia todos los campos del formulario."""
+        self.usuario_entry.delete(0, tk.END)
+        self.password_entry.delete(0, tk.END)
+        self.usuario_entry.config(style="TEntry")

@@ -1,13 +1,33 @@
+1. PROMPT INICIAL
 Hola, tengo un proyecto a desarrollar con mysql y python, estos códigos de biblioteca.py, execute.py, libro.py y usuario.py, son de un ejemplo de un programa que maneja una biblioteca por 
 medio de una conexión de base de datos con SQL...
 Ahora lo que quiero convertir es mi programa propuesto en mi "Caso de Uso Proyecto" en el .pdf a un programa en python como el de la biblioteca pero bien estructurado, lo que debe de tener es lo siguiente:
-
 .- Mínimo 6 clases implementadas que reflejan principios de POO.
-
 .- Mínimo 4 tablas con operaciones CRUD completas (alta, baja, consulta, modificación).
-
 .- Aplica mínimo 5 pruebas unitarias que validan distintos componentes del sistema y maneja excepciones.
-
-
-
 ¿Cómo puedo aplicarlo o estructurarlo de la mejor manera?
+
+
+2. PROMPT PARA PANTALLA DE CREACIÓN DE USUARIOS:
+Listo, ahora como puedes ver en mí código login.py, agregué una línea debajo de inicio de sesión, esta se llama "ttk.Button(frame, text="Registrar Nuevo Usuario", command=self).grid(row=8, column=0, columnspan=2, pady=(0, 10), sticky="ew")"
+Básicamente su función que tendrá es la creación de un usuario dentro de la base de datos, previo a esto se pedirá un código de super usuario (este será '123456'), y en base a esto vamos a poder crear usuario 'admin', 'general' o 'chofer'...
+Y serán los parámetros que se habían establecido en un inició, la idea es que la interfaz lo solicite y estos se puedan mandar como consulta para ser creados:
+
+1. Usuario admin: id, username, password_hashvarchar, rol('admin'), telefono, estado, ('activo'), created_attimestamp
+2. Usuario general: id, username, password_hashvarchar, rol ('general'), licencia, telefono, estado ('activo','inactivo'), created_attimestamp
+3. Usuario chofer: id, username, password_hashvarchar, rol('chofer'), licencia, telefono, estado ('activo','inactivo'), created_attimestamp
+Por ejemplo:
+1. Selecciono "Registrar Nuevo Usuario"
+2. Saldrá una ventana emergente que dirá "Inserta la contraseña"
+3. Una vez válidado, mostrará las opciones en botones: ¿Qué usuario deseas crear? 'admin', 'general', 'chofer'...
+4. Pedir la info según el caso (Ejemplo con chofer):
+.- id (Este será automatico)
+.- Usuario (username), código tipo: EMP-PG01 (Que "EMP-PG" ya este establecido solo mover el número y evidentemente no chocar si un usuario ya ocupo ese número)
+.- Contraseña (password_hashvarchar)
+.- Rol (Por default ya se selecciono anteriormente)
+.- Licencia
+.- Telefono
+.- Estado activo por defecto
+5. Seleccionar "Registrar Usuario" (Tener en cuenta el botón cancelar también)
+6. Mostrar mensaje en la consola y en una venta que diga "Usuario registrado correctamente" (Agregar validación de llenar todos los datos)
+7. Este tiene que mostrarse en la bd obviamente

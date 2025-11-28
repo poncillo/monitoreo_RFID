@@ -18,45 +18,54 @@ CREATE TABLE vehiculos (
     modelo VARCHAR(100),
     capacidad_cilindros INT NOT NULL,
     estado ENUM('disponible', 'mantenimiento', 'ocupado') DEFAULT 'disponible',
-    chofer_asignado INT NULL,  -- FOREIGN KEY corregida
+    chofer_id INT NULL, 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    FOREIGN KEY (chofer_asignado) REFERENCES users(id) ON DELETE SET NULL
+    FOREIGN KEY (chofer_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- Tabla 3: Rutas
 CREATE TABLE rutas (
-    id_ruta INT AUTO_INCREMENT PRIMARY KEY,
-    id_chofer INT NOT NULL,
-    id_vehiculo INT NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    chofer_id INT NOT NULL,
+    vehiculo_id INT NOT NULL,
     origen VARCHAR(255) NOT NULL,
     destino VARCHAR(255) NOT NULL,
     distancia_km DECIMAL(8,2),
     tiempo_estimado_min INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    FOREIGN KEY (id_chofer) REFERENCES choferes(id_usuario),
-    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id_vehiculo)
+    estado ENUM('programada', 'en_camino', 'completada', 'cancelada') DEFAULT 'programada',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (chofer_id) REFERENCES users(id),
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculos(id)
 );
 
 -- Tabla 4: Cilidnros--
 CREATE TABLE cilindros (
-    id_cilindro INT AUTO_INCREMENT PRIMARY KEY,
-    codigo_rfid VARCHAR(64) UNIQUE NOT NULL, -- Identificador único del chip RFID
-    capacidad_kg DECIMAL(5,2) NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_rfid VARCHAR(64) UNIQUE NOT NULL,
+    capacidad_kg DECIMAL(5,2) NOT NULL CHECK (capacidad_kg > 0),
     estado ENUM('almacen', 'en_ruta', 'entregado', 'mantenimiento') DEFAULT 'almacen',
     fecha_ultimo_mantenimiento DATE,
-    id_vehiculo_actual INT NULL, -- Cilindro cargado en un vehículo
-    FOREIGN KEY (id_vehiculo_actual) REFERENCES vehiculos(id_vehiculo)
+    vehiculo_id INT NULL,
+    ruta_id INT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculos(id) ON DELETE SET NULL,
+    FOREIGN KEY (ruta_id) REFERENCES rutas(id) ON DELETE SET NULL
 );
 
 -- Tabla 5: Historial de Ubicaciones (Para trazabilidad y mapas)
 CREATE TABLE historial_ubicaciones (
-    id_historial INT AUTO_INCREMENT PRIMARY KEY,
-    id_vehiculo INT NOT NULL, -- ¿Quién reportó?
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    vehiculo_id INT NOT NULL,
     latitud DECIMAL(10, 8) NOT NULL,
     longitud DECIMAL(11, 8) NOT NULL,
     fecha_reporte DATETIME DEFAULT CURRENT_TIMESTAMP,
-    
-    FOREIGN KEY (id_vehiculo) REFERENCES vehiculos(id)
+    FOREIGN KEY (vehiculo_id) REFERENCES vehiculos(id)
 );
 
 -- DIPSY --
+
+-- Creación de usuario manual para prueba --
+USE monitoreo_rfid_db;
+
+INSERT INTO users (username, password_hash, rol, licencia, telefono) 
+VALUES ('admin', '1234', 'admin', 'LIC-001', '555-0001');

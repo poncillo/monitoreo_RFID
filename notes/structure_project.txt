@@ -16,4 +16,4 @@ monitoreo_rfid/
 │   └── monitoreoRFID.sql #Aquí solo van las tablas
 ├── db_connection.py          # Conexión a BD (similar al ejemplo)
 ├── .env
-└── execute.py/main.py (Cómo convenga mejor llamarlo)   
+└── main.py (Cómo convenga mejor llamarlo)   
