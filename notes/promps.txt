@@ -96,3 +96,23 @@ Migra los cambios y elimina el código de main.py y dejálo en su respectiva pan
                 font=("Arial", 16, "bold")).pack(pady=20)
 
 4. PROMP
+Ok, ahora vamos con las funciones de general y chofer
+general:
+.- Visualizar todos los usuarios, pero no sus contraseñas (solo usuario, rol, telefono y estado) y exportar en excel y pdf...
+.- Visualizar Vehiculos en tabla, únicamente placa, modelo, capacidad_cilindros, estado, chofer que lo maneja y exportar en excel y pdf...
+.- Visualizar Rutas en tabla, id, Chofer encargado de la ruta, vehiculo del chofer (Placas), origen, destino distancia km, tiempo estimado minutos, estado y exportar en excel y pdf...
+
+chofer:
+.- visualizar Vehiculos activos
+.- visualizar sus vehiculos y rutas correspondientes (poder modificar el estado de la ruta 'en_camino', 'completada)
+
+5. PROMP
+Ok, pasemos entonces con cilindros, para este apartado no haremos una vista de view_cilindros porque no tiene sentido, sino que haremos lo siguiente, el usuario o los usuarios generales van a tener una opción más,
+la cual se va a llamar “Gestionar Cilindros”, y de esta misma van a asignar los cilindros a los vehículos correspondientes, registrando su id de manera automática, insertando:
+.- el rfid
+.- capacidad kg (droptable de 20 y 30)
+.- estado (droptable 'almacen', 'en_ruta', 'entregado', 'mantenimiento')
+.- fecha ultimo mantenimiento (date entry)
+.- vehiculo al que se asignado
+.- chofer elegido en automatico según el vehiculo que este vinculado a él (Vehiculos en mantenimiento no aplican)
+.- la creación o fecha de creación igual es de manera automática...

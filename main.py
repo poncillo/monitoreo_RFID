@@ -51,10 +51,13 @@ class Application(tk.Tk):
             
         # Crear panel principal según rol
         if self.usuario_actual.rol == 'admin':
+            from views.view_admin import AdminView
             AdminView(self, self)
         elif self.usuario_actual.rol == 'chofer':
+            from views.view_chofer import ChoferView
             ChoferView(self, self)
         else:  # general
+            from views.view_general import GeneralView
             GeneralView(self, self)
             
     def cerrar_sesion(self):
