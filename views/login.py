@@ -1,7 +1,8 @@
 import re
 import tkinter as tk
 from tkinter import ttk, messagebox
-from models.usuario import Usuario  # Importamos nuestro modelo Usuario
+from models.usuario import Usuario  # Importamos nuestro modelo 
+from views.user_register import RegistroUsuarioView
 
 class LoginViewCH(tk.Frame):
     def __init__(self, parent, controlador=None):
@@ -11,7 +12,14 @@ class LoginViewCH(tk.Frame):
         self.style = ttk.Style()
         self.estilos_personalizados()
         self.interface_conf()
-        
+    
+    def iniciar_registro(self):
+        """Crea la instancia de la vista de registro e inicia el proceso."""
+        # Creamos el objeto de la clase que está en el otro archivo
+        registro = RegistroUsuarioView(self)
+        # Ejecutamos su método iniciar (que pide la contraseña maestra)
+        registro.iniciar()
+
     def estilos_personalizados(self):
         """Configura estilos personalizados para los campos de entrada en caso de error."""
         self.style.configure("Error.TEntry", foreground="red", bordercolor="#dc3545", fieldbackground="#ffe6e6")
@@ -63,7 +71,7 @@ class LoginViewCH(tk.Frame):
         # Botón para Iniciar Sesión
         ttk.Button(frame, text="Iniciar Sesión", command=self.iniciar_sesion).grid(row=6, column=0, columnspan=2, pady=(15, 5), sticky="ew")
         # Botón de Creación de usuario
-        ttk.Button(frame, text="Registrar Nuevo Usuario", command=self).grid(row=8, column=0, columnspan=2, pady=(0, 10), sticky="ew")
+        ttk.Button(frame, text="Registrar Nuevo Usuario", command=self.iniciar_registro).grid(row=7, column=0, columnspan=2, pady=(0, 10), sticky="ew")
         # Botón para Salir
         ttk.Button(frame, text="Salir", command=self.exit, style="Danger.TButton").grid(row=8, column=0, columnspan=2, pady=(0, 10), sticky="ew")
 
