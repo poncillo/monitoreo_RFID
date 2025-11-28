@@ -52,6 +52,10 @@ class Vehiculo:
             conn.commit()
             cursor.close()
             conn.close()
+            
+            # IMPRIMIR EN CONSOLA - NUEVA LÍNEA AGREGADA
+            print("Registro de vehiculo completo!")
+            
             return True
         except Exception as e:
             print(f"Error al crear vehículo: {e}")

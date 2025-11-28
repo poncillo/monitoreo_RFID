@@ -148,6 +148,9 @@ class LoginViewCH(tk.Frame):
                 self.usuario_entry.delete(0, tk.END)
                 self.password_entry.delete(0, tk.END)
                 
+                # IMPRIMIR EN CONSOLA - NUEVA LÍNEA AGREGADA
+                print("login exitoso!")
+                
                 # Notificar al controlador del login exitoso
                 if self.controlador:
                     self.controlador.on_login_exitoso(usuario)
